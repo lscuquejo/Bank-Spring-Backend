@@ -61,6 +61,8 @@ public class AccountController {
     {
         AccountRest returnValue = new AccountRest();
 
+        if(accountDetails.getName() == null) throw new AccountServiceExcepetion(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+
         AccountDto accountDto = new AccountDto();
         BeanUtils.copyProperties(accountDetails, accountDto);
 
@@ -81,6 +83,8 @@ public class AccountController {
         )
     {
         AccountRest returnValue = new AccountRest();
+
+        if(accountDetails.getName().isEmpty()) throw new AccountServiceExcepetion(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         AccountDto accountDto = new AccountDto();
         BeanUtils.copyProperties(accountDetails, accountDto);
