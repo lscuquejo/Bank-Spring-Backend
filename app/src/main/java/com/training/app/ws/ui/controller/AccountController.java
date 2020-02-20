@@ -140,12 +140,14 @@ public class AccountController {
         OperationStatusModel returnValue = new OperationStatusModel();
 
         AccountEntity source = accountRepository.findByUid(transferDetails.getSourceId());
+        if(source == null) throw new AccountServiceExcepetion(ErrorMessages.BAD_REQUEST.getErrorMessage() + ": Source id was not found");
 
         AccountEntity target = accountRepository.findByUid(transferDetails.getTargetId());
+        if(target == null) throw new AccountServiceExcepetion(ErrorMessages.BAD_REQUEST.getErrorMessage() + ": Target id was not found");
 
-        if(source.getTreasury() == false) {
-            if(source.getBalance().intValue() < transferDetails.getSourceBalance().intValue()) throw new AccountServiceExcepetion(ErrorMessages.BAD_REQUEST.getErrorMessage() + " you don't have enoght balance");
-        }
+        if(source.getBalance().intValue() < transferDetails.getSourceBalance().intValue()) throw new AccountServiceExcepetion(
+            ErrorMessages.BAD_REQUEST.getErrorMessage() + ": the source hasn't got enoght balance"
+        );
         
         source.setBalance(source.getBalance().subtract(transferDetails.getSourceBalance()));
         target.setBalance(target.getBalance().add(transferDetails.getSourceBalance()));
